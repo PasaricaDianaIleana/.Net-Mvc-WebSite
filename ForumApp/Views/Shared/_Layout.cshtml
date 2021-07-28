@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+@inject UserManager<ForumDataLayer.Models.ApplicationUser>  UserManager;
+@inject SignInManager<ForumDataLayer.Models.ApplicationUser> SignInManager;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,44 +10,83 @@
     <title>@ViewData["Title"] - ForumApp</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100&family=Roboto:wght@100&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ForumApp</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
+        <nav class="navbar  navbar-light" style="margin-top: -3rem; background-color:#2D2E2E;height:12vh ">
+            <div class="container">
+                <div class="narbar-header">
+                    <a class="navbar-brand navLogo" asp-controller="Home" asp-action="Index"></a>
+                </div>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav nav flex-grow-1">
+                        <li>
+                            <a asp-controller="Forum" asp-action="Index">Forums</a>
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    Settings
+                                    <span class="carte"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li role="separator" class="dropdown-divider"></li>
+                                    <li class="dropdown-header">Profile</li>
+                                    <li><a asp-controller="Profile" asp-action="Detail">My Profile</a></li>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <li role="separator" class="dropdown-divider"></li>
+                                        <li class="dropdown-header">Admin</li>
+                                        <li> <a asp-controller="Forum" asp-action="Create">Create Forum</a></li>
+                                        <li><a asp-controller="Profile" asp-action="Index">View Users</a></li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        </ul>
+                        @if (!SignInManager.IsSignedIn(User))
+                        {
+                            <ul class="nav navbar-nav navbar-default navbar-expand-sm " style="margin:-3rem 6rem 0 0">
+                                <li class="active mr-4">
+                                <a asp-controller="Account"  asp-action="Login" >Sign In</a>
+                                </li>
+                                <li class="active" style="display:inline"  >
+                                <a asp-controller="Account" asp-action="Register" >Register</a>
+                                </li>
+                            </ul>
+                        }
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <form  asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
+                                <ul class="nav navbar-nav navbar-default navbar-expand-sm">
+                                    <li>Hello, @UserManager.GetUserName(User)</li>
+                                    <li class="active"><a asp-controller="Account" asp-action="Logout">Sign Out</a></li>
+                                </ul>
+                            </form>
+                        }
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </nav>
+       
         <div class="container">
-            &copy; 2021 - ForumApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
+
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2021 - ForumApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
 </html>

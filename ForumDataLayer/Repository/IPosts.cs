@@ -17,5 +17,6 @@ namespace ForumDataLayer.Repository
         Task Delete(int id);
         Task Edit(int id, string text);
         Task AddReply(PostReply reply);
+        IEnumerable<Post> GetLatestPosts(int number);
     }
 }

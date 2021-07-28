@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Form_Service
@@ -40,7 +39,10 @@ namespace Form_Service
 
         public IEnumerable<Post> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Posts
+                .Include(post=>post.User)
+                .Include(post=>post.Replies).ThenInclude(reply=>reply.User)
+                .Include(post=>post.Forum);
         }
 
         public Post GetById(int id)
@@ -50,6 +52,11 @@ namespace Form_Service
                   .Include(p => p.Replies)
                   .ThenInclude(u=>u.User)
                   .Include(f => f.Forum).FirstOrDefault();
+        }
+
+        public IEnumerable<Post> GetLatestPosts(int number)
+        {
+          return  GetAll().OrderByDescending(p => p.Created).Take(number);
         }
 
         public IEnumerable<Post> GetPostBySearch(string searchQuery)
