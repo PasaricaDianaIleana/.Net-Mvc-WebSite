@@ -9,5 +9,11 @@ namespace ForumDataLayer.Models
 {
    public class ApplicationUser:IdentityUser
     {
+        public int Rating { get; set; }
+        public string ProfileImage { get; set; }
+        public DateTime AccountCreated { get; set; }
+        public bool IsActive { get; set; }
+
+
     }
 }

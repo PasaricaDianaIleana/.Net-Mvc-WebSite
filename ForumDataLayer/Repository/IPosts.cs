@@ -10,7 +10,7 @@ namespace ForumDataLayer.Repository
    public interface IPosts
     {
         Post GetById(int id);
-        Post GetPostsByForumId(int id);
+       IEnumerable<Post> GetPostsByForumId(int id);
         IEnumerable<Post> GetAll();
         IEnumerable<Post> GetPostBySearch(string searchQuery);
         Task Add(Post post);

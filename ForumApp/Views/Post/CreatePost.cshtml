@@ -1,0 +1,15 @@
+﻿@model ForumApp.ViewModels.Posts.NewPostModel
+
+<h1>New post @Model.ForumName</h1>
+<form asp-action="AddPost" method="post" id="addPostForm">
+    <div class="form-group">
+        <label asp-for="ForumName"></label>
+        <input asp-for="ForumName"class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Content"></label>
+        <textarea asp-for="Content" class="form-control"></textarea>
+    </div>
+    <button type="submit" id="submitPostBtn" class="btn btn-submitPost">Submit Post</button>
+    <input asp-for="ForumId" type="hidden" />
+</form>

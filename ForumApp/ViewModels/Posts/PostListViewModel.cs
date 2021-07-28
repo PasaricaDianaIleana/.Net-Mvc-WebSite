@@ -12,7 +12,7 @@ namespace ForumApp.ViewModels.Posts
         public string Title { get; set; }
         public string UserName { get; set; }
         public int UserRaiting { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public string DatePosted { get; set; }
         public int RepliesNumber { get; set; }
 

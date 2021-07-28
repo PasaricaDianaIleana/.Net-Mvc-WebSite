@@ -1,6 +1,8 @@
 using Form_Service;
 using ForumApp.Data;
 using ForumDataLayer;
+using ForumDataLayer.Models;
+using ForumDataLayer.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -28,9 +30,10 @@ namespace ForumApp
                     Configuration.GetConnectionString("DefaultConnection")));
            
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddScoped<IForum,FormService>();
+            services.AddScoped<IPosts, PostService>();
             services.AddControllersWithViews();
         }
 
