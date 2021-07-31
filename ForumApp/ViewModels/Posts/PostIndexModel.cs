@@ -12,8 +12,11 @@ namespace ForumApp.ViewModels.Posts
         public string UserName { get; set; }
         public string ImageUrl { get; set; }
         public int UserRaiting { get; set; }
+        public int ForumId { get; set; }
+        public string ForumName { get; set; }
         public DateTime Created { get; set; }
         public string PostContent { get; set; }
+        public bool IsAdmin { get; set; }
 
         public IEnumerable<PostReplyModel> Replies { get; set; }
 

@@ -31,6 +31,7 @@ namespace ForumApp
            
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddScoped<IForum,FormService>();
             services.AddScoped<IPosts, PostService>();

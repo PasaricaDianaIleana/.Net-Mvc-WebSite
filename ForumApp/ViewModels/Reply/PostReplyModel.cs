@@ -11,6 +11,7 @@ namespace ForumApp.ViewModels.Reply
         public string ImageUrl { get; set; }
         public DateTime Created { get; set; }
         public string ReplyContent { get; set; }
+        public bool IsAuthorAdmin { get; set; }
         public int PostId { get; set; }
 
     }

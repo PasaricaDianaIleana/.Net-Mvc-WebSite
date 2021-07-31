@@ -37,12 +37,19 @@ namespace ForumApp.Controllers
                 UserRaiting = post.User.Rating,
                 Created = post.Created,
                 PostContent = post.Content,
-                Replies = replies
+                Replies = replies,
+                ForumId = post.Forum.Id,
+                ForumName = post.Forum.Title,
+                IsAdmin = IsAdmin(post.User)
             };
             return View(model);
         }
 
-    
+        private  bool IsAdmin(ApplicationUser user)
+        {
+            return _userManager.GetRolesAsync(user).Result.Contains("Admin");
+        }
+
         public IActionResult CreatePost(int Id)
         {
             var forum = _forumRepository.GetById(Id);
@@ -66,17 +73,19 @@ namespace ForumApp.Controllers
             _postRepository.Add(post).Wait();//Block the current thread until the post method is complete
             return RedirectToAction("Index", "Post",post.Id );
         }
-        private static IEnumerable<PostReplyModel> GetReplies(IEnumerable<PostReply> replies)
+        private IEnumerable<PostReplyModel> GetReplies(IEnumerable<PostReply> replies)
         {
-            return replies.Select(reply => new PostReplyModel { 
-            Id=reply.Id,
-            UserName=reply.User.UserName,
-            UserId=reply.User.Id,
-            ImageUrl=reply.User.ProfileImage,
-            UserRaiting=reply.User.Rating,
-            Created=reply.Created,
-            ReplyContent=reply.Content
-            });
+            return replies.Select(reply => new PostReplyModel
+            {
+                Id = reply.Id,
+                UserName = reply.User.UserName,
+                UserId = reply.User.Id,
+                ImageUrl = reply.User.ProfileImage,
+                UserRaiting = reply.User.Rating,
+                Created = reply.Created,
+                ReplyContent = reply.Content,
+                IsAuthorAdmin = IsAdmin(reply.User)
+            }); ;
         }
         private  Post  CreatePost(NewPostModel model,ApplicationUser user)
         {
