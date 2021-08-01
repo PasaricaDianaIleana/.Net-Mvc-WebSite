@@ -1,37 +1,94 @@
 ﻿@model ForumApp.ViewModels.Posts.ForumPostList
 
-<h1>Welcome to the @Model.Forum.Title Forum! </h1>
-<span id="headingBtn">
-    <a asp-controller="Post" asp-action="CreatePost" asp-route-Id="@Model.Forum.Id" class="btn btn-NewPost">
-        Create Post
-    </a>
-</span>
-@if (Model.Posts.Any())
-{
-<table class="table table-bordered table-hover" >
-    <tbody>
-        @foreach (var post in Model.Posts)
-        {
-            <tr>
-                <td>
-                    <a asp-controller="Post" asp-action="Index" asp-route-id="@post.Id">
-                        @post.Title
-                    </a>  
-                </td>
-                <td>@post.UserName</td>
-                <td>@post.DatePosted</td>
-                <td>@post.RepliesNumber</td>
-            </tr>
-        }
-    </tbody>
-</table>
-}
-else
-{
-    <div class="noPosts">
-        <h3>No posts on forum @Model.Forum.Title!</h3>
-        <a asp-controller="Post" asp-action="CreatePost" asp-route-Id="@Model.Forum.Id">
-          Create Post
-        </a>
+
+<div class="container body-content">
+    <div class="row sectionHeader">
+        <div class="sectionHeading">
+            <span>@Model.Forum.Title</span>
+            @if (Context.User.Identity.IsAuthenticated)
+            {
+                <span id="headingBtn">
+                    <a asp-controller="Post" asp-action="CreatePost" asp-route-Id="@Model.Forum.Id" class="btn btn-NewPost">
+                        Create Post
+                    </a>
+                </span>
+            }
+            <form asp-controller="Forum" asp-action="Search" method="post">
+                <div class="searchForm">
+                    <input asp-for="SearchQuery" type="text" placeholder="Search..." class="searchBar" onfocus="clearInput(this)" />
+                    <button type="submit" class="btn btnSearch">
+                        Search
+                    </button>
+                </div>
+                <input asp-for="Forum.Id" name="id" type="hidden" />
+            </form>
+        </div>
+   
+        <div class="sectionDescription">
+            <p>Welcome to the @Model.Forum.Title forum. Please keep posts friendly and on-topic.</p>
+
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <p>
+                    <span>You must be a 
+                        <a asp-area="Identity" asp-page="/Account/Register">register member </a>  to create a new post</span>
+                </p>
+            }
+
+        </div>        
     </div>
+    <div class="row forumIndexContent">
+        @if(Model.Posts.Any())
+            {
+                <table class="table table-hover table-bordered" id="forumIndexTable">
+                    <tbody>
+                        @foreach(var post in Model.Posts)
+                        { 
+                            <tr>
+                                <td>
+                                    <div class="postData">
+                                        <div class="postTitle">
+                                            <a asp-controller="Post" asp-action="Index" asp-route-id="@post.Id">@post.Title</a>
+                                        </div>
+                                        <div class="forumSubTitle">
+                                            <div>
+                                                <span class="postAuthorContainer">
+                                                    <a asp-controller="Profile" asp-action="Detail" asp-route-id="@post.UserId">
+                                                        @post.UserName
+                                                    </a>
+                                                </span>
+                                                (@post.UserRaiting) on
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="forumPostCount">
+                                        Replies: @post.RepliesNumber
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="postDate">@post.DatePosted</div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else 
+            {
+            <div class="noPosts">
+                <h3>There are no posts to be found</h3>
+            </div>
+            }
+    </div>
+</div>
+
+
+@section Scripts{ 
+<script>
+    function clearInput(target) {
+        target.value = "";
+    }
+</script>
 }

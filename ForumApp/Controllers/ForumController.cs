@@ -4,6 +4,7 @@ using ForumDataLayer.Models;
 using ForumDataLayer.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ForumApp.Controllers
@@ -33,10 +34,11 @@ namespace ForumApp.Controllers
             };
             return View(model);
         }
-        public IActionResult Topic(int id)
+        public IActionResult Topic(int id,string searchQuery)
         {
             var forum = _repository.GetById(id);
-            var posts = _postsRepository.GetPostsByForumId(id);
+            var posts = new List<Post>();
+            posts = _postsRepository.GetPostBySearch(forum, searchQuery).ToList();
             var postsList = posts.Select(post => new PostListViewModel
             {
                 Id=post.Id,
@@ -56,7 +58,11 @@ namespace ForumApp.Controllers
             };
             return View(model);
         }
-
+        [HttpPost]
+        public IActionResult Search(int id,string searchQuery)
+        {
+            return RedirectToAction("Topic", new { id, searchQuery });
+        }
         private static ForumListModel ForumData(Post post)
         {
             var forum = post.Forum;

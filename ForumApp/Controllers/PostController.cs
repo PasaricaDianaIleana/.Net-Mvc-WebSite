@@ -27,6 +27,7 @@ namespace ForumApp.Controllers
         {
             var post = _postRepository.GetById(id);
             var replies = GetReplies(post.Replies);
+
             var model = new PostIndexModel
             {
                 Id = post.Id,

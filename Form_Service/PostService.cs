@@ -59,9 +59,11 @@ namespace Form_Service
           return  GetAll().OrderByDescending(p => p.Created).Take(number);
         }
 
-        public IEnumerable<Post> GetPostBySearch(string searchQuery)
+        public IEnumerable<Post> GetPostBySearch(Forum forum,string searchQuery)
         {
-            throw new NotImplementedException();
+          
+            return String.IsNullOrEmpty(searchQuery)? forum.Posts :
+                forum.Posts.Where(x => x.Title.Contains(searchQuery) || x.Content.Contains(searchQuery));
         }
 
         public IEnumerable<Post> GetPostsByForumId(int id)
