@@ -66,6 +66,12 @@ namespace Form_Service
                 forum.Posts.Where(x => x.Title.Contains(searchQuery) || x.Content.Contains(searchQuery));
         }
 
+        public IEnumerable<Post> GetPostBySearch(string searchQuery)
+        {
+            return GetAll().Where(posts => posts.Title.Contains(searchQuery)
+             || posts.Content.Contains(searchQuery));
+        }
+
         public IEnumerable<Post> GetPostsByForumId(int id)
         {
             return _context.Forums.Where(x => x.Id == id).FirstOrDefault().Posts;

@@ -13,6 +13,7 @@ namespace ForumDataLayer.Repository
        IEnumerable<Post> GetPostsByForumId(int id);
         IEnumerable<Post> GetAll();
         IEnumerable<Post> GetPostBySearch(Forum forum,string searchQuery);
+        IEnumerable<Post> GetPostBySearch(string searchQuery);
         Task Add(Post post);
         Task Delete(int id);
         Task Edit(int id, string text);
